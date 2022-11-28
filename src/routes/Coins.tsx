@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Coin from "./Coin";
 
 const StContainer = styled.div`
   padding: 0px 20px;
@@ -18,13 +17,14 @@ const StCoinsList = styled.ul``;
 
 const StCoin = styled.li`
   margin-bottom: 10px;
-  padding: 20px;
   border-radius: 15px;
   background-color: white;
   color: ${({ theme }) => theme.bgColor};
 
   a {
-    display: block;
+    display: flex;
+    align-items: center;
+    padding: 20px;
     transition: color 0.2s ease-in;
   }
 
@@ -43,6 +43,12 @@ const StTitle = styled.h1`
 const StLoader = styled.span`
   display: block;
   text-align: center;
+`;
+
+const StImage = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
 `;
 interface CoinInterface {
   id: string;
@@ -66,7 +72,7 @@ const Coins = () => {
       setLoading(false);
     })();
   }, []);
-  console.log(coins);
+
   return (
     <StContainer>
       <StHeader>
@@ -78,7 +84,13 @@ const Coins = () => {
         <StCoinsList>
           {coins.map((coin) => (
             <StCoin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link to={`/${coin.id}`} state={coin.name}>
+                <StImage
+                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  alt={coin.symbol}
+                />
+                {coin.name} &rarr;
+              </Link>
             </StCoin>
           ))}
         </StCoinsList>
