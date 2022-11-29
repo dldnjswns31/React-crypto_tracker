@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import Chart from "./Chart";
+import Price from "./Price";
 
 const StContainer = styled.div`
   padding: 0px 20px;
@@ -21,6 +24,50 @@ const StTitle = styled.h1`
 const StLoader = styled.span`
   display: block;
   text-align: center;
+`;
+
+const StOverview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+const StOverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`;
+const StDescription = styled.p`
+  margin: 20px 0px;
+`;
+
+const StTabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const StTab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
 `;
 
 interface RouteState {
@@ -89,6 +136,8 @@ const Coin = () => {
   const [priceInfo, setPriceInfo] = useState<PriceData>();
   const { coinId } = useParams();
   const { state: name } = useLocation() as RouteState;
+  const priceMatch = useMatch("/:coinId/price");
+  const chartMatch = useMatch("/:coinId/chart");
 
   useEffect(() => {
     (async () => {
@@ -98,18 +147,59 @@ const Coin = () => {
       const priceData = await (
         await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
       ).json();
-      console.log("infodata", infoData);
-      console.log("pricedata", priceData);
       setInfo(infoData);
       setPriceInfo(priceData);
+      setLoading(false);
     })();
-  }, []);
+  }, [coinId]);
   return (
     <StContainer>
       <StHeader>
-        <StTitle>{name || "Loading"}</StTitle>
+        <StTitle>{name ? name : loading ? "Loading..." : info?.name}</StTitle>
       </StHeader>
-      {loading ? <StLoader>Loading...</StLoader> : null}
+      {loading ? (
+        <StLoader>Loading...</StLoader>
+      ) : (
+        <>
+          <StOverview>
+            <StOverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </StOverviewItem>
+            <StOverviewItem>
+              <span>Symbol:</span>
+              <span>${info?.symbol}</span>
+            </StOverviewItem>
+            <StOverviewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source ? "Yes" : "No"}</span>
+            </StOverviewItem>
+          </StOverview>
+          <StDescription>{info?.description}</StDescription>
+          <StOverview>
+            <StOverviewItem>
+              <span>Total Suply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </StOverviewItem>
+            <StOverviewItem>
+              <span>Max Supply:</span>
+              <span>{priceInfo?.max_supply}</span>
+            </StOverviewItem>
+          </StOverview>
+          <StTabs>
+            <StTab isActive={chartMatch !== null}>
+              <Link to="chart">Chart</Link>
+            </StTab>
+            <StTab isActive={priceMatch !== null}>
+              <Link to="price">Price</Link>
+            </StTab>
+          </StTabs>
+          <Routes>
+            <Route path="price" element={<Price />} />
+            <Route path="chart" element={<Chart />} />
+          </Routes>
+        </>
+      )}
     </StContainer>
   );
 };
