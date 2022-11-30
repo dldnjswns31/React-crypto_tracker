@@ -8,8 +8,9 @@ import { fetchCoinInfo, fetchCoinTickers } from "../apis/api";
 import { Helmet } from "react-helmet-async";
 
 const StContainer = styled.div`
-  width: 500px;
+  width: 480px;
   padding: 0px 20px;
+  margin: 0 auto;
 `;
 
 const StHeader = styled.header`

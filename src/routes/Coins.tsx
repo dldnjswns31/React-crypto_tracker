@@ -1,28 +1,45 @@
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
 import { fetchCoins } from "../apis/api";
-import { Helmet } from "react-helmet-async";
+import { isDarkAtom } from "../recoil/atoms";
 
 const StContainer = styled.div`
-  width: 500px;
+  width: 480px;
   padding: 0px 20px;
+  margin: 0 auto;
 `;
 
 const StHeader = styled.header`
-  height: 10vh;
+  position: relative;
   display: flex;
+  height: 10vh;
   justify-content: center;
   align-items: center;
+`;
+
+const StToggleButton = styled.button`
+  position: absolute;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.cardBgColor};
+  font-size: 1.5rem;
+  cursor: pointer;
 `;
 
 const StCoinsList = styled.ul``;
 
 const StCoin = styled.li`
   margin-bottom: 10px;
+  border: 1px solid white;
   border-radius: 15px;
-  background-color: white;
-  color: ${({ theme }) => theme.bgColor};
+  background-color: ${({ theme }) => theme.cardBgColor};
+  color: ${({ theme }) => theme.textColor};
 
   a {
     display: flex;
@@ -64,6 +81,8 @@ interface ICoin {
 }
 
 const Coins = () => {
+  const [isDark, setDarkAtom] = useRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
 
   return (
@@ -73,6 +92,9 @@ const Coins = () => {
       </Helmet>
       <StHeader>
         <StTitle>코인</StTitle>
+        <StToggleButton onClick={toggleDarkAtom}>
+          {isDark ? "🌞" : "🌛"}
+        </StToggleButton>
       </StHeader>
       {isLoading ? (
         <StLoader>Loading...</StLoader>

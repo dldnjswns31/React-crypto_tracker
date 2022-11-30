@@ -1,8 +1,7 @@
 import React from "react";
 import App from "./App";
 import ReactDOM from "react-dom/client";
-import { ThemeProvider } from "styled-components";
-import { theme } from "./styles/theme";
+import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -19,12 +18,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
-        <ThemeProvider theme={theme}>
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <HelmetProvider>
           <App />
-        </ThemeProvider>
-      </HelmetProvider>
-    </QueryClientProvider>
+        </HelmetProvider>
+      </QueryClientProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );
