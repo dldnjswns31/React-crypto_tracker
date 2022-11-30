@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
 import { fetchCoinInfo, fetchCoinTickers } from "../apis/api";
+import { Helmet } from "react-helmet-async";
 
 const StContainer = styled.div`
   width: 500px;
@@ -143,11 +144,16 @@ const Coin = () => {
     () => fetchCoinInfo(coinId)
   );
   const { isLoading: tickersLoading, data: tickersData } =
-    useQuery<TickersData>(["tickers", coinId], () => fetchCoinTickers(coinId));
+    useQuery<TickersData>(["tickers", coinId], () => fetchCoinTickers(coinId), {
+      refetchInterval: 5000,
+    });
 
   const loading = infoLoading || tickersLoading;
   return (
     <StContainer>
+      <Helmet>
+        <title>{name ? name : loading ? "Loading..." : infoData?.name}</title>
+      </Helmet>
       <StHeader>
         <StTitle>
           {name ? name : loading ? "Loading..." : infoData?.name}
@@ -167,8 +173,8 @@ const Coin = () => {
               <span>${infoData?.symbol}</span>
             </StOverviewItem>
             <StOverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>$ {tickersData?.quotes.USD.price.toFixed(3)}</span>
             </StOverviewItem>
           </StOverview>
           <StDescription>{infoData?.description}</StDescription>
