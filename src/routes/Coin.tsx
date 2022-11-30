@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, useMatch } from "react-router-dom";
 import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +7,7 @@ import Price from "./Price";
 import { fetchCoinInfo, fetchCoinTickers } from "../apis/api";
 
 const StContainer = styled.div`
-  width: 480px;
+  width: 500px;
   padding: 0px 20px;
 `;
 
@@ -193,7 +192,7 @@ const Coin = () => {
           </StTabs>
           <Routes>
             <Route path="price" element={<Price />} />
-            <Route path="chart" element={<Chart />} />
+            <Route path="chart" element={<Chart coinId={coinId!} />} />
           </Routes>
         </>
       )}

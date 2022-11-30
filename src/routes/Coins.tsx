@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { fetchCoins } from "../apis/api";
 
 const StContainer = styled.div`
-  width: 480px;
+  width: 500px;
   padding: 0px 20px;
 `;
 
