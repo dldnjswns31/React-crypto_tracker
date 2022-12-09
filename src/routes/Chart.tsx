@@ -18,27 +18,12 @@ interface ChartProps {
   coinId: string;
 }
 
-interface ICandleDataDetail {
-  x: number;
-  y: number[];
-}
-
-type CandleData = ICandleDataDetail[];
-
 const Chart = ({ coinId }: ChartProps) => {
   const isDark = useRecoilValue(isDarkAtom);
   const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
     fetchCoinHistory(coinId)
   );
-  // console.log(data);
-  console.log(
-    data?.map((price) => {
-      return {
-        x: price.time_close,
-        y: [price.open, price.high, price.low, price.close],
-      };
-    })
-  );
+
   return (
     <div>
       {isLoading ? (

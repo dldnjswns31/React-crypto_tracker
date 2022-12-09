@@ -25,7 +25,7 @@ const StToggleButton = styled.button`
   right: 10px;
   width: 40px;
   height: 40px;
-  border: 2px solid white;
+  border: none;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.cardBgColor};
   font-size: 1.5rem;
@@ -36,7 +36,6 @@ const StCoinsList = styled.ul``;
 
 const StCoin = styled.li`
   margin-bottom: 10px;
-  border: 1px solid white;
   border-radius: 15px;
   background-color: ${({ theme }) => theme.cardBgColor};
   color: ${({ theme }) => theme.textColor};

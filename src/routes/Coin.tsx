@@ -40,7 +40,7 @@ const StLoader = styled.span`
 const StOverview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.cardBgColor};
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -71,7 +71,7 @@ const StTab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.cardBgColor};
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
@@ -208,7 +208,7 @@ const Coin = () => {
             </StTab>
           </StTabs>
           <Routes>
-            <Route path="price" element={<Price />} />
+            <Route path="price" element={<Price coinId={coinId!} />} />
             <Route path="chart" element={<Chart coinId={coinId!} />} />
           </Routes>
         </>
