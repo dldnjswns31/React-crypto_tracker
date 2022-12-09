@@ -95,14 +95,6 @@ const Chart = ({ coinId }: ChartProps) => {
             yaxis: {
               show: false,
             },
-            fill: {
-              type: "gradient",
-              gradient: {
-                gradientToColors: ["#0be881"],
-                stops: [0, 100],
-              },
-            },
-            colors: ["#0fbcf9"],
             tooltip: {
               y: {
                 formatter: (v) => `$ ${v}`,

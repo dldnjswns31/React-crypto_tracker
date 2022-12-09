@@ -1,6 +1,7 @@
 import { Link, useMatch } from "react-router-dom";
 import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { AiFillHome } from "react-icons/ai";
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
@@ -14,10 +15,16 @@ const StContainer = styled.div`
 `;
 
 const StHeader = styled.header`
+  position: relative;
   height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  a {
+    position: absolute;
+    left: 20px;
+  }
 `;
 
 const StTitle = styled.h1`
@@ -157,6 +164,9 @@ const Coin = () => {
       </Helmet>
       <StHeader>
         <StTitle>
+          <Link to="/">
+            <AiFillHome size="30px" />
+          </Link>
           {name ? name : loading ? "Loading..." : infoData?.name}
         </StTitle>
       </StHeader>
