@@ -18,10 +18,26 @@ interface ChartProps {
   coinId: string;
 }
 
+interface ICandleDataDetail {
+  x: number;
+  y: number[];
+}
+
+type CandleData = ICandleDataDetail[];
+
 const Chart = ({ coinId }: ChartProps) => {
   const isDark = useRecoilValue(isDarkAtom);
   const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
     fetchCoinHistory(coinId)
+  );
+  // console.log(data);
+  console.log(
+    data?.map((price) => {
+      return {
+        x: price.time_close,
+        y: [price.open, price.high, price.low, price.close],
+      };
+    })
   );
   return (
     <div>
@@ -29,11 +45,20 @@ const Chart = ({ coinId }: ChartProps) => {
         "Loading chart..."
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
-              name: "price",
-              data: data?.map((price) => Number(price.close)) as number[],
+              data: data?.map((price) => {
+                return {
+                  x: new Date(price.time_close * 1000).toUTCString(),
+                  y: [
+                    Number(price.open),
+                    Number(price.high),
+                    Number(price.low),
+                    Number(price.close),
+                  ],
+                };
+              }) as unknown as number[],
             },
           ]}
           options={{
